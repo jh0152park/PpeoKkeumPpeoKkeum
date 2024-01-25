@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./screens/Home";
 import Loyout from "./screens/global/Layout";
@@ -23,7 +24,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    return <RouterProvider router={router} />;
+    return (
+        <>
+            <Helmet>
+                <title>뻐끔뻐끔</title>
+            </Helmet>
+            <RouterProvider router={router} />
+        </>
+    );
 }
 
 export default App;
