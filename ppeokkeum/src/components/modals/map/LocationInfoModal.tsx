@@ -1,4 +1,5 @@
 import {
+    FormLabel,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -22,10 +23,23 @@ export default function LocationInfoModal({
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent bgColor="#121210">
                 <ModalHeader>{smokingArea.location}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody></ModalBody>
+                <ModalBody>
+                    <FormLabel>주소</FormLabel>
+                    <FormLabel>
+                        {smokingArea.address
+                            ? smokingArea.address
+                            : "확인이 어렵습니다"}
+                    </FormLabel>
+                    <FormLabel mt="40px">출처</FormLabel>
+                    <FormLabel>
+                        {smokingArea.isGovernmentData
+                            ? "공공데이터"
+                            : "회원출처"}
+                    </FormLabel>
+                </ModalBody>
             </ModalContent>
         </Modal>
     );
