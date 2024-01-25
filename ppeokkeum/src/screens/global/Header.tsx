@@ -5,13 +5,12 @@ import { refresh } from "../../utils/util";
 
 export default function Header() {
     return (
-        <VStack
-            mt="50px"
-            mb="30px"
-            _hover={{ cursor: "pointer" }}
-            onClick={refresh}
-        >
-            <Heading position="relative">
+        <VStack mt="50px" mb="30px">
+            <Heading
+                position="relative"
+                _hover={{ cursor: "pointer" }}
+                onClick={refresh}
+            >
                 <span style={{ color: "red" }}>공공데이터와</span> 함께하는
                 <span style={{ color: "#FD7210" }}> 뻐끔뻐끔</span>
                 <Box position="absolute" top={-10} left={-100}>
