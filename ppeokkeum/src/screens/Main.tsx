@@ -4,7 +4,6 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 export default function Main() {
     return (
         <VStack w="100%" h="100vh">
-            <Heading>MAIN</Heading>
             <Box w="100%" h="100%">
                 <Map
                     center={{ lat: 33.5563, lng: 126.79581 }}

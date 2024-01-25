@@ -1,17 +1,9 @@
 import Lottie from "lottie-react";
-import { Box, Center, Heading, Image, VStack } from "@chakra-ui/react";
+import { Center, Heading, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import Cigarette from "../cigarette.json";
-import Smorking from "../smoking.json";
-import Button from "../components/home/button";
 
-{
-    /* <Lottie
-    style={{ width: 300, height: 300 }}
-    animationData={Cigarette}
-    loop={true}
-/> */
-}
+import Smorking from "../smoking.json";
+import Button from "../components/home/Button";
 
 export default function Home() {
     const navigate = useNavigate();
