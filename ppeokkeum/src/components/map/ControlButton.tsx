@@ -57,6 +57,11 @@ export default function ControlButton({ icon, action }: IButtonProps) {
         }
     }
 
+    function addCurrentLocation() {
+        // have to set to current location before adding location
+        getCurrentLocation();
+    }
+
     function doSeparateAction() {
         if (action === "zoomIn") {
             zoomIn();

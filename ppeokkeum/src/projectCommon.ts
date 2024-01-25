@@ -20,16 +20,16 @@ export const SCREEN_HEIGHT = atom({
 });
 
 export const MAP_LEVEL = atom({
-    default: 3,
+    default: 5,
     key: "MAP_LEVEL",
 });
 
 export const CURRENT_LATITUDE = atom({
-    default: 37.5710015,
+    default: 37.5318046,
     key: "CURRENT_LATITUDE",
 });
 
 export const CURRENT_LONGITUDE = atom({
-    default: 126.9769419,
+    default: 126.9141547,
     key: "CURRENT_LONGITUDE",
 });

@@ -69,7 +69,7 @@ export default function Main() {
                         icon={FaLocationCrosshairs}
                         action="current"
                     />
-                    <ControlButton icon={TiPlus} />
+                    <ControlButton icon={TiPlus} action="add" />
                 </VStack>
                 <Map
                     center={{ lat: currentLatitude, lng: currentLongitude }}
@@ -78,10 +78,27 @@ export default function Main() {
                     level={mapLevel}
                     ref={mapRef}
                 >
-                    <LoadingScreen />
-                    {/* <MapMarker position={{ lat: 37.5710015, lng: 126.9769419 }}>
-                        <div style={{ color: "#000" }}>Hello World!</div>
-                    </MapMarker> */}
+                    {!smokingArea ? (
+                        <LoadingScreen />
+                    ) : (
+                        smokingArea.map((area, index) => (
+                            <MapMarker
+                                key={index}
+                                position={{
+                                    lat: Number(area.latitude),
+                                    lng: Number(area.longitude),
+                                }}
+                                image={{
+                                    src: process.env
+                                        .REACT_APP_MAKER_IMAGE as "",
+                                    size: {
+                                        width: 50,
+                                        height: 50,
+                                    },
+                                }}
+                            />
+                        ))
+                    )}
                 </Map>
             </Box>
         </VStack>
