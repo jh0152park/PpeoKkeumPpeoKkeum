@@ -3,7 +3,7 @@ import App from "./App";
 import { reset } from "styled-reset";
 import { createGlobalStyle } from "styled-components";
 import { RecoilRoot } from "recoil";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript, theme } from "@chakra-ui/react";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -28,7 +28,10 @@ root.render(
     <>
         <RecoilRoot>
             <GlobalStyle />
-            <ChakraProvider>
+            <ChakraProvider theme={theme}>
+                <ColorModeScript
+                    initialColorMode={theme.config.initialColorMode}
+                />
                 <App />
             </ChakraProvider>
         </RecoilRoot>
