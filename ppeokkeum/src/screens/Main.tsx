@@ -12,8 +12,6 @@ import { TiPlus } from "react-icons/ti";
 export default function Main() {
     const mapRef = useRef<kakao.maps.Map>(null);
     const mapLevel = useRecoilValue(MAP_LEVEL);
-    const setMapLevel = useSetRecoilState(MAP_LEVEL);
-    // 1 to 14
 
     return (
         <VStack w="100%" h="100%">
