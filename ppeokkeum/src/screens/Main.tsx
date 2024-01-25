@@ -1,20 +1,41 @@
 import { Box, Heading, VStack } from "@chakra-ui/react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import SearchBar from "../components/main/SearchBar";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { MAP_LEVEL } from "../projectCommon";
+import { useRef } from "react";
+import ControlButton from "../components/map/ControlButton";
+import { FiZoomIn, FiZoomOut } from "react-icons/fi";
+import { FaLocationCrosshairs } from "react-icons/fa6";
+import { TiPlus } from "react-icons/ti";
 
 export default function Main() {
+    const mapRef = useRef<kakao.maps.Map>(null);
+    const mapLevel = useRecoilValue(MAP_LEVEL);
+    const setMapLevel = useSetRecoilState(MAP_LEVEL);
+    // 1 to 14
+
     return (
         <VStack w="100%" h="100%">
             <SearchBar />
 
-            <Box w="100%" h="100%">
+            <Box w="100%" h="100%" position="relative">
+                <VStack position="absolute" zIndex="99" left="10px" top="50px">
+                    <ControlButton icon={FiZoomIn} />
+                    <ControlButton icon={FiZoomOut} />
+                    <ControlButton icon={FaLocationCrosshairs} />
+                    <ControlButton icon={TiPlus} />
+                </VStack>
                 <Map
                     center={{ lat: 37.5710015, lng: 126.9769419 }}
                     style={{ width: "100%", height: "100%" }}
+                    zoomable={true}
+                    level={mapLevel}
+                    ref={mapRef}
                 >
-                    <MapMarker position={{ lat: 37.5710015, lng: 126.9769419 }}>
+                    {/* <MapMarker position={{ lat: 37.5710015, lng: 126.9769419 }}>
                         <div style={{ color: "#000" }}>Hello World!</div>
-                    </MapMarker>
+                    </MapMarker> */}
                 </Map>
             </Box>
         </VStack>
