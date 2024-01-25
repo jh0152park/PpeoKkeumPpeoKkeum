@@ -1,4 +1,4 @@
-import { Center, Icon, position, useToast } from "@chakra-ui/react";
+import { Center, Icon, useToast } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
