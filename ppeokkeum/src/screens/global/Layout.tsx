@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./\bHeader";
+import { Box } from "@chakra-ui/react";
 
 export default function Loyout() {
     const location = useLocation();
@@ -8,7 +9,9 @@ export default function Loyout() {
     return (
         <>
             {!isHome && <Header />}
-            <Outlet />
+            <Box px="10px">
+                <Outlet />
+            </Box>
         </>
     );
 }
