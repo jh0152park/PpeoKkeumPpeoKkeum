@@ -4,7 +4,7 @@ import SearchBar from "../components/main/SearchBar";
 
 export default function Main() {
     return (
-        <VStack w="100%" h="100vh">
+        <VStack w="100%" h="100%">
             <SearchBar />
 
             <Box w="100%" h="100%">
