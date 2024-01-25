@@ -1,4 +1,10 @@
-import { Box, Heading, VStack, useToast } from "@chakra-ui/react";
+import {
+    Box,
+    Heading,
+    VStack,
+    useDisclosure,
+    useToast,
+} from "@chakra-ui/react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import SearchBar from "../components/main/SearchBar";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -16,6 +22,7 @@ import { TiPlus } from "react-icons/ti";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { FirebaseDB } from "../Firebase";
 import LoadingScreen from "../components/map/LoadingScreen";
+import LocationInfoModal from "../components/modals/map/LocationInfoModal";
 
 export default function Main() {
     const toast = useToast();
@@ -23,7 +30,11 @@ export default function Main() {
     const mapLevel = useRecoilValue(MAP_LEVEL);
     const currentLatitude = useRecoilValue(CURRENT_LATITUDE);
     const currentLongitude = useRecoilValue(CURRENT_LONGITUDE);
+
     const [smokingArea, setSmokingArea] = useState<ISmokingArea[]>();
+    const [singleArea, setSingleArea] = useState<ISmokingArea>();
+
+    const locationInfoModal = useDisclosure();
 
     async function getSmokingAreas() {
         try {
@@ -50,6 +61,13 @@ export default function Main() {
                 title: "잠시 후 다시 이용해주세요",
                 description: "1,390개의 공공데이터 불러오기를 실패했습니다",
             });
+        }
+    }
+
+    function onSmokingAreaClick(index: number) {
+        if (smokingArea) {
+            locationInfoModal.onOpen();
+            setSingleArea(smokingArea[index]);
         }
     }
 
@@ -96,11 +114,20 @@ export default function Main() {
                                         height: 50,
                                     },
                                 }}
+                                onClick={() => onSmokingAreaClick(index)}
                             />
                         ))
                     )}
                 </Map>
             </Box>
+
+            {singleArea && (
+                <LocationInfoModal
+                    isOpen={locationInfoModal.isOpen}
+                    onClose={locationInfoModal.onClose}
+                    smokingArea={singleArea}
+                />
+            )}
         </VStack>
     );
 }
