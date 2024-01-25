@@ -21,8 +21,8 @@ export default function Main() {
 
             <Box w="100%" h="100%" position="relative">
                 <VStack position="absolute" zIndex="99" left="10px" top="50px">
-                    <ControlButton icon={FiZoomIn} />
-                    <ControlButton icon={FiZoomOut} />
+                    <ControlButton icon={FiZoomIn} action="zoomIn" />
+                    <ControlButton icon={FiZoomOut} action="zoomOut" />
                     <ControlButton icon={FaLocationCrosshairs} />
                     <ControlButton icon={TiPlus} />
                 </VStack>
