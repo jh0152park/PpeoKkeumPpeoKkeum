@@ -9,3 +9,8 @@ export const SCREEN_HEIGHT = atom({
     default: window.document.documentElement.clientHeight,
     key: "SCREEN_WIDTH",
 });
+
+export const MAP_LEVEL = atom({
+    default: 3,
+    key: "MAP_LEVEL",
+});
