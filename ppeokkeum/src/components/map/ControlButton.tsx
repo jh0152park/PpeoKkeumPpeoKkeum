@@ -1,7 +1,11 @@
-import { Center, Icon } from "@chakra-ui/react";
+import { Center, Icon, position, useToast } from "@chakra-ui/react";
 import { IconType } from "react-icons";
-import { useRecoilState } from "recoil";
-import { MAP_LEVEL } from "../../projectCommon";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+    CURRENT_LATITUDE,
+    CURRENT_LONGITUDE,
+    MAP_LEVEL,
+} from "../../projectCommon";
 
 interface IButtonProps {
     icon: IconType;
@@ -9,27 +13,57 @@ interface IButtonProps {
 }
 
 export default function ControlButton({ icon, action }: IButtonProps) {
+    const toast = useToast();
     const [mapLevel, setMapLevel] = useRecoilState(MAP_LEVEL);
+    const setCurrentLatitude = useSetRecoilState(CURRENT_LATITUDE);
+    const setCurrentLongitude = useSetRecoilState(CURRENT_LONGITUDE);
 
-    function ZoomIn() {
+    function zoomIn() {
         if (mapLevel === 1) {
             return;
         }
         setMapLevel((prev) => prev - 1);
     }
 
-    function ZoomOut() {
+    function zoomOut() {
         if (mapLevel === 14) {
             return;
         }
         setMapLevel((prev) => prev + 1);
     }
 
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setCurrentLatitude(position.coords.latitude);
+                    setCurrentLongitude(position.coords.longitude);
+                },
+                (error) => {
+                    toast({
+                        status: "error",
+                        title: "현재 위치를 가지고올 수 없습니다",
+                        description:
+                            "위치정보를 확인할 수 있는 권한을 확인해주세요",
+                    });
+                }
+            );
+        } else {
+            toast({
+                status: "error",
+                title: "현재 위치를 가지고올 수 없습니다",
+                description: "위치정보를 확인할 수 있는 권한을 확인해주세요",
+            });
+        }
+    }
+
     function doSeparateAction() {
         if (action === "zoomIn") {
-            ZoomIn();
+            zoomIn();
         } else if (action === "zoomOut") {
-            ZoomOut();
+            zoomOut();
+        } else if (action === "current") {
+            getCurrentLocation();
         }
     }
 
