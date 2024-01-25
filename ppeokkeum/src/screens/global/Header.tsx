@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 
 export default function Header() {
     return (
-        <VStack mt="50px" mb="10px">
+        <VStack mt="50px" mb="30px">
             <Heading position="relative">
                 뻐끔뻐끔
                 <Box position="absolute" top={-10} left={-100}>
