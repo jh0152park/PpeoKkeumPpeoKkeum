@@ -69,6 +69,8 @@ export default function ControlButton({ icon, action }: IButtonProps) {
             zoomOut();
         } else if (action === "current") {
             getCurrentLocation();
+        } else if (action === "add") {
+            addCurrentLocation();
         }
     }
 
