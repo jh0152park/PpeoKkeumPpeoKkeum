@@ -1,5 +1,14 @@
 import { atom } from "recoil";
 
+export interface ISmokingArea {
+    id?: string;
+    address: string;
+    location: string;
+    latitude: string | number;
+    longitude: string | number;
+    isGovernmentData: boolean;
+}
+
 export const SCREEN_WIDTH = atom({
     default: window.document.documentElement.clientWidth,
     key: "SCREEN_WIDTH",
@@ -7,7 +16,7 @@ export const SCREEN_WIDTH = atom({
 
 export const SCREEN_HEIGHT = atom({
     default: window.document.documentElement.clientHeight,
-    key: "SCREEN_WIDTH",
+    key: "SCREEN_HEIGHT",
 });
 
 export const MAP_LEVEL = atom({
