@@ -6,7 +6,8 @@ export default function Header() {
     return (
         <VStack mt="50px" mb="30px">
             <Heading position="relative">
-                뻐끔뻐끔
+                <span style={{ color: "red" }}>공공데이터와</span> 함께하는
+                <span style={{ color: "#FD7210" }}> 뻐끔뻐끔</span>
                 <Box position="absolute" top={-10} left={-100}>
                     <Lottie
                         style={{ width: 100, height: 100 }}
