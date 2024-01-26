@@ -20,7 +20,7 @@ import { FcLike, FcDislike } from "react-icons/fc";
 import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
-import { FirebaseDB } from "../../../Firebase";
+import { FirebaseAuth, FirebaseDB } from "../../../Firebase";
 import Comment from "./Comment";
 
 interface IProps {
@@ -38,34 +38,6 @@ export default function LocationInfoModal({
     const [like, setLike] = useState(0);
     const [dislike, setDislike] = useState(0);
     const { register, reset, handleSubmit } = useForm();
-
-    const dummy_comment = [
-        {
-            author: "John",
-            comment: "노량진 컵밥 맛있네",
-        },
-        {
-            author: "DongHoon",
-            comment: "사법고시 노량진에서 준비했었음~~~~~~~~~~~~~~~~~~~~~~",
-        },
-        {
-            author: "eric",
-            comment: "밥먹고 식후땡하기 좋음",
-        },
-        {
-            author: "eric",
-            comment: "밥먹고 식후땡하기 좋음",
-        },
-        {
-            author: "eric",
-            comment: "밥먹고 식후땡하기 좋음",
-        },
-        {
-            author: "eric",
-            comment:
-                "밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음",
-        },
-    ];
 
     async function onModalClose() {
         onClose();
@@ -93,7 +65,7 @@ export default function LocationInfoModal({
         });
     }
 
-    function updateComment({ comment }: FieldValues) {
+    async function updateComment({ comment }: FieldValues) {
         if (!comment) {
             toast({
                 status: "error",
@@ -101,7 +73,17 @@ export default function LocationInfoModal({
             });
             return;
         }
-        console.log(comment);
+        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
+        await updateDoc(ref, {
+            comments: [
+                ...smokingArea.comments,
+                {
+                    author: FirebaseAuth.currentUser?.displayName,
+                    comment: comment,
+                },
+            ],
+        });
+        onClose();
         reset();
     }
 
@@ -184,7 +166,7 @@ export default function LocationInfoModal({
                         h="200px"
                         overflowY="scroll"
                     >
-                        {dummy_comment.map((comment, index) => (
+                        {smokingArea.comments.map((comment, index) => (
                             <Comment key={index} comment={comment} />
                         ))}
                     </VStack>
