@@ -198,6 +198,8 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
             <CertificationModal
                 isOpen={certificateModal.isOpen}
                 onClose={certificateModal.onClose}
+                previousModalClose={onClose}
+                previousFormReset={reset}
             />
         </>
     );
