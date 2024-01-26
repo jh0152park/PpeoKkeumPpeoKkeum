@@ -21,6 +21,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { FirebaseDB } from "../../../Firebase";
+import Comment from "./Comment";
 
 interface IProps {
     isOpen: boolean;
@@ -38,17 +39,38 @@ export default function LocationInfoModal({
     const [dislike, setDislike] = useState(0);
     const { register, reset, handleSubmit } = useForm();
 
+    const dummy_comment = [
+        {
+            author: "John",
+            comment: "노량진 컵밥 맛있네",
+        },
+        {
+            author: "DongHoon",
+            comment: "사법고시 노량진에서 준비했었음~~~~~~~~~~~~~~~~~~~~~~",
+        },
+        {
+            author: "eric",
+            comment: "밥먹고 식후땡하기 좋음",
+        },
+        {
+            author: "eric",
+            comment: "밥먹고 식후땡하기 좋음",
+        },
+        {
+            author: "eric",
+            comment: "밥먹고 식후땡하기 좋음",
+        },
+        {
+            author: "eric",
+            comment:
+                "밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음 밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음밥먹고 식후땡하기 좋음",
+        },
+    ];
+
     async function onModalClose() {
         onClose();
 
-        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
-        await updateDoc(ref, {
-            like: like ? smokingArea.like + like : smokingArea.like,
-            dislike: dislike
-                ? smokingArea.dislike + dislike
-                : smokingArea.dislike,
-        });
-
+        updateLikeAndDislike();
         setLike(0);
         setDislike(0);
     }
@@ -61,7 +83,17 @@ export default function LocationInfoModal({
         setDislike((prev) => (prev < 0 ? 0 : -1));
     }
 
-    function onSubmit({ comment }: FieldValues) {
+    async function updateLikeAndDislike() {
+        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
+        await updateDoc(ref, {
+            like: like ? smokingArea.like + like : smokingArea.like,
+            dislike: dislike
+                ? smokingArea.dislike + dislike
+                : smokingArea.dislike,
+        });
+    }
+
+    function updateComment({ comment }: FieldValues) {
         if (!comment) {
             toast({
                 status: "error",
@@ -129,7 +161,7 @@ export default function LocationInfoModal({
                     <HStack
                         w="100%"
                         as="form"
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={handleSubmit(updateComment)}
                     >
                         <Input
                             w="90%"
@@ -145,6 +177,17 @@ export default function LocationInfoModal({
                             등록
                         </Button>
                     </HStack>
+                    <VStack
+                        mt="20px"
+                        pr="1px"
+                        w="100%"
+                        h="200px"
+                        overflowY="scroll"
+                    >
+                        {dummy_comment.map((comment, index) => (
+                            <Comment key={index} comment={comment} />
+                        ))}
+                    </VStack>
                 </ModalBody>
             </ModalContent>
         </Modal>
