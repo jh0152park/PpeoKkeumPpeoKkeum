@@ -11,6 +11,7 @@ import {
     ModalOverlay,
     Text,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import { FieldValues, useForm } from "react-hook-form";
 import { LuUser2 } from "react-icons/lu";
@@ -20,6 +21,7 @@ import {
     REGISTER_INPUT_EMAIL,
     REGISTER_INPUT_PASSWORD,
 } from "../../../projectCommon";
+import { CreateAccount } from "../../../utils/firestore/account/CreateAccount";
 
 interface IProps {
     isOpen: boolean;
@@ -27,12 +29,26 @@ interface IProps {
 }
 
 export default function CertificationModal({ isOpen, onClose }: IProps) {
+    const toast = useToast();
     const email = useRecoilValue(REGISTER_INPUT_EMAIL);
     const password = useRecoilValue(REGISTER_INPUT_PASSWORD);
     const { register, reset, handleSubmit } = useForm();
 
-    function onSubmit({ name, nicknmame }: FieldValues) {
-        console.log(email, password, name, nicknmame);
+    function onSubmit({ name, nickname }: FieldValues) {
+        if (!name) {
+            toast({
+                status: "error",
+                title: "이름을 입력해주세요",
+            });
+            return;
+        }
+        if (!nickname) {
+            toast({
+                status: "error",
+                title: "닉네임을 입력해주세요",
+            });
+        }
+        CreateAccount(email, password, name, nickname);
     }
 
     return (
