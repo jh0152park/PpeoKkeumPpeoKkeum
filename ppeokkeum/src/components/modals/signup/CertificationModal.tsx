@@ -1,4 +1,5 @@
 import {
+    Button,
     Center,
     FormLabel,
     Icon,
@@ -22,19 +23,28 @@ import {
     REGISTER_INPUT_PASSWORD,
 } from "../../../projectCommon";
 import { CreateAccount } from "../../../utils/firestore/account/CreateAccount";
+import { useState } from "react";
 
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
+    previousModalClose: () => void;
+    previousFormReset: () => void;
 }
 
-export default function CertificationModal({ isOpen, onClose }: IProps) {
+export default function CertificationModal({
+    isOpen,
+    onClose,
+    previousModalClose,
+    previousFormReset,
+}: IProps) {
     const toast = useToast();
     const email = useRecoilValue(REGISTER_INPUT_EMAIL);
     const password = useRecoilValue(REGISTER_INPUT_PASSWORD);
     const { register, reset, handleSubmit } = useForm();
+    const [loading, setLoading] = useState(false);
 
-    function onSubmit({ name, nickname }: FieldValues) {
+    async function onSubmit({ name, nickname }: FieldValues) {
         if (!name) {
             toast({
                 status: "error",
@@ -48,7 +58,26 @@ export default function CertificationModal({ isOpen, onClose }: IProps) {
                 title: "닉네임을 입력해주세요",
             });
         }
-        CreateAccount(email, password, name, nickname);
+        setLoading(true);
+        const isSuccess = await CreateAccount(email, password, name, nickname);
+
+        if (isSuccess) {
+            toast({
+                status: "success",
+                title: "회원가입이 완료되었습니다",
+                description: "로그인 후 이용해 주세요",
+            });
+            reset();
+            onClose();
+            previousModalClose();
+            previousFormReset();
+        } else {
+            toast({
+                status: "error",
+                title: "이메일주소 또는 닉네임을 이미 사용중입니다",
+            });
+        }
+        setLoading(false);
     }
 
     return (
@@ -98,7 +127,7 @@ export default function CertificationModal({ isOpen, onClose }: IProps) {
                         />
                     </InputGroup>
 
-                    <Center
+                    <Button
                         mt="20px"
                         w="100%"
                         h="45px"
@@ -111,9 +140,10 @@ export default function CertificationModal({ isOpen, onClose }: IProps) {
                         transition="all 0.1s linear"
                         as="button"
                         type="submit"
+                        isLoading={loading}
                     >
                         회원가입 완료
-                    </Center>
+                    </Button>
                 </VStack>
             </ModalContent>
         </Modal>

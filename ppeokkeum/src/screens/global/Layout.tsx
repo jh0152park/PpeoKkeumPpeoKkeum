@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Header from "./\bHeader";
+import Header from "./Header";
 import { Box } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { SCREEN_HEIGHT } from "../../projectCommon";
