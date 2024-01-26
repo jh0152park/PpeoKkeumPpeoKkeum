@@ -37,7 +37,6 @@ export default function LocationInfoModal({
     const { register, reset, handleSubmit } = useForm();
 
     function onModalClose() {
-        console.log("close");
         onClose();
     }
 
