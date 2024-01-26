@@ -41,3 +41,13 @@ export const CURRENT_LONGITUDE = atom({
     default: 126.9141547,
     key: "CURRENT_LONGITUDE",
 });
+
+export const REGISTER_INPUT_EMAIL = atom({
+    default: "",
+    key: "REGISTER_INPUT_EMAIL",
+});
+
+export const REGISTER_INPUT_PASSWORD = atom({
+    default: "",
+    key: "REGISTER_INPUT_PASSWORD",
+});
