@@ -1,13 +1,7 @@
-import {
-    Box,
-    Heading,
-    VStack,
-    useDisclosure,
-    useToast,
-} from "@chakra-ui/react";
+import { Box, VStack, useDisclosure, useToast } from "@chakra-ui/react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import SearchBar from "../components/main/SearchBar";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
     CURRENT_LATITUDE,
     CURRENT_LONGITUDE,
@@ -50,6 +44,9 @@ export default function Main() {
                         latitude: doc.data().latitude,
                         longitude: doc.data().longitude,
                         isGovernmentData: doc.data().isGovernmentData,
+                        comments: doc.data().comments,
+                        like: doc.data().like,
+                        dislike: doc.data().dislike,
                     };
                 });
                 setSmokingArea(entireArea);
@@ -70,6 +67,26 @@ export default function Main() {
             setSingleArea(smokingArea[index]);
         }
     }
+
+    // async function update() {
+    //     if (!smokingArea) return;
+
+    //     for (var area of smokingArea) {
+    //         const docRef = doc(FirebaseDB, "smokingArea", area.id);
+    //         await updateDoc(docRef, {
+    //             comments: [
+    //                 {
+    //                     author: "",
+    //                     comment: "",
+    //                 },
+    //             ],
+    //         });
+    //     }
+    // }
+
+    // if (smokingArea) {
+    //     update();
+    // }
 
     useEffect(() => {
         getSmokingAreas();

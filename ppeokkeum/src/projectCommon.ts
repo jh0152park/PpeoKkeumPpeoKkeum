@@ -1,12 +1,20 @@
 import { atom } from "recoil";
 
+export interface IComment {
+    author: string;
+    comment: string;
+}
+
 export interface ISmokingArea {
-    id?: string;
+    id: string;
     address: string;
     location: string;
     latitude: string | number;
     longitude: string | number;
     isGovernmentData: boolean;
+    comments: IComment[];
+    like: number;
+    dislike: number;
 }
 
 export const SCREEN_WIDTH = atom({

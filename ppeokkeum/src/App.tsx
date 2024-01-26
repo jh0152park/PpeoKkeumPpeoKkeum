@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    // uploadDB();
     return (
         <>
             <Helmet>
