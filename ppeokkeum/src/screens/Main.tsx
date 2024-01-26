@@ -68,26 +68,6 @@ export default function Main() {
         }
     }
 
-    // async function update() {
-    //     if (!smokingArea) return;
-
-    //     for (var area of smokingArea) {
-    //         const docRef = doc(FirebaseDB, "smokingArea", area.id);
-    //         await updateDoc(docRef, {
-    //             comments: [
-    //                 {
-    //                     author: "",
-    //                     comment: "",
-    //                 },
-    //             ],
-    //         });
-    //     }
-    // }
-
-    // if (smokingArea) {
-    //     update();
-    // }
-
     useEffect(() => {
         getSmokingAreas();
     }, []);

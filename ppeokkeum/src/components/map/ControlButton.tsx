@@ -1,4 +1,4 @@
-import { Center, Icon, useToast } from "@chakra-ui/react";
+import { Center, Icon, useDisclosure, useToast } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
@@ -6,6 +6,8 @@ import {
     CURRENT_LONGITUDE,
     MAP_LEVEL,
 } from "../../projectCommon";
+import AddCurrentPlaceModal from "../modals/map/AddCurrentPlaceModal";
+import { sleep } from "../../utils/util";
 
 interface IButtonProps {
     icon: IconType;
@@ -17,6 +19,7 @@ export default function ControlButton({ icon, action }: IButtonProps) {
     const [mapLevel, setMapLevel] = useRecoilState(MAP_LEVEL);
     const setCurrentLatitude = useSetRecoilState(CURRENT_LATITUDE);
     const setCurrentLongitude = useSetRecoilState(CURRENT_LONGITUDE);
+    const addCrrentPlaceModal = useDisclosure();
 
     function zoomIn() {
         if (mapLevel === 1) {
@@ -60,6 +63,9 @@ export default function ControlButton({ icon, action }: IButtonProps) {
     function addCurrentLocation() {
         // have to set to current location before adding location
         getCurrentLocation();
+        setMapLevel(1);
+
+        addCrrentPlaceModal.onOpen();
     }
 
     function doSeparateAction() {
@@ -75,16 +81,23 @@ export default function ControlButton({ icon, action }: IButtonProps) {
     }
 
     return (
-        <Center
-            w="35px"
-            h="35px"
-            borderRadius="5px"
-            bgColor="dodgerblue"
-            _hover={{ cursor: "pointer", transform: ["scale(1.1)"] }}
-            transition="all 0.2s linear"
-            onClick={doSeparateAction}
-        >
-            <Icon as={icon} w="60%" h="60%" />
-        </Center>
+        <>
+            <Center
+                w="35px"
+                h="35px"
+                borderRadius="5px"
+                bgColor="dodgerblue"
+                _hover={{ cursor: "pointer", transform: ["scale(1.1)"] }}
+                transition="all 0.2s linear"
+                onClick={doSeparateAction}
+            >
+                <Icon as={icon} w="60%" h="60%" />
+            </Center>
+
+            <AddCurrentPlaceModal
+                isOpen={addCrrentPlaceModal.isOpen}
+                onClose={addCrrentPlaceModal.onClose}
+            />
+        </>
     );
 }

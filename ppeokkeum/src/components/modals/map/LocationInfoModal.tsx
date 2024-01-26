@@ -18,10 +18,10 @@ import {
 import { ISmokingArea } from "../../../projectCommon";
 import { FcLike, FcDislike } from "react-icons/fc";
 import { FieldValues, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { FirebaseAuth, FirebaseDB } from "../../../Firebase";
+import { useState } from "react";
 import Comment from "./Comment";
+import { RegisterComment } from "../../../utils/firestore/comment/RegisterComment";
+import { RegisterEmotion } from "../../../utils/firestore/emotion/RegisterEmotion";
 
 interface IProps {
     isOpen: boolean;
@@ -42,7 +42,7 @@ export default function LocationInfoModal({
     async function onModalClose() {
         onClose();
 
-        updateLikeAndDislike();
+        await RegisterEmotion(like, dislike, smokingArea);
         setLike(0);
         setDislike(0);
     }
@@ -55,16 +55,6 @@ export default function LocationInfoModal({
         setDislike((prev) => (prev < 0 ? 0 : -1));
     }
 
-    async function updateLikeAndDislike() {
-        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
-        await updateDoc(ref, {
-            like: like ? smokingArea.like + like : smokingArea.like,
-            dislike: dislike
-                ? smokingArea.dislike + dislike
-                : smokingArea.dislike,
-        });
-    }
-
     async function updateComment({ comment }: FieldValues) {
         if (!comment) {
             toast({
@@ -73,16 +63,19 @@ export default function LocationInfoModal({
             });
             return;
         }
-        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
-        await updateDoc(ref, {
-            comments: [
-                ...smokingArea.comments,
-                {
-                    author: FirebaseAuth.currentUser?.displayName,
-                    comment: comment,
-                },
-            ],
-        });
+        const isSuccess = await RegisterComment(comment, smokingArea);
+        if (isSuccess) {
+            toast({
+                status: "success",
+                title: "댓글달기 성공",
+            });
+        } else {
+            toast({
+                status: "error",
+                title: "댓글달기 실패",
+            });
+        }
+
         onClose();
         reset();
     }
