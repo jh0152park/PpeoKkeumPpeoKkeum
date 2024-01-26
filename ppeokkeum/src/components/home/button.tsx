@@ -16,13 +16,14 @@ export default function Button({ text, modalOpen }: IProps) {
     return (
         <Center
             w="150px"
-            h="40px"
+            h="50px"
             borderRadius="10px"
             bgColor="#8a7e74"
             color="white"
             fontWeight="bold"
             _hover={{ cursor: "pointer", transform: ["scale(1.05)"] }}
             transition="all 0.1s linear"
+            fontSize="18px"
             onClick={onModalOpen}
         >
             {text}

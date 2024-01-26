@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Smorking from "../smoking.json";
 import Button from "../components/home/Button";
 import LoginModal from "../components/modals/login/LoginModal";
+import SignupModal from "../components/modals/signup/SignupModal";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -36,6 +37,10 @@ export default function Home() {
             <LoginModal
                 isOpen={loginModal.isOpen}
                 onClose={loginModal.onClose}
+            />
+            <SignupModal
+                isOpen={signinModal.isOpen}
+                onClose={signinModal.onClose}
             />
         </Center>
     );

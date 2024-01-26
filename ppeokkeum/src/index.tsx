@@ -5,6 +5,12 @@ import { createGlobalStyle } from "styled-components";
 import { RecoilRoot } from "recoil";
 import { ChakraProvider, ColorModeScript, theme } from "@chakra-ui/react";
 
+declare global {
+    interface Window {
+        IMP: any;
+    }
+}
+
 const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
