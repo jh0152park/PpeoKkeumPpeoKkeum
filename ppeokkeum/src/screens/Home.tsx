@@ -1,12 +1,14 @@
 import Lottie from "lottie-react";
-import { Center, Heading, VStack } from "@chakra-ui/react";
+import { Center, Heading, VStack, useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-
 import Smorking from "../smoking.json";
 import Button from "../components/home/Button";
+import LoginModal from "../components/modals/login/LoginModal";
 
 export default function Home() {
     const navigate = useNavigate();
+    const loginModal = useDisclosure();
+    const signinModal = useDisclosure();
 
     return (
         <Center w="100%" h="100vh">
@@ -27,10 +29,14 @@ export default function Home() {
                     뻐끔뻐끔
                 </Heading>
                 <VStack mt="50px" spacing="20px">
-                    <Button text="로그인" />
-                    <Button text="회원가입" />
+                    <Button text="로그인" modalOpen={loginModal.onOpen} />
+                    <Button text="회원가입" modalOpen={signinModal.onOpen} />
                 </VStack>
             </VStack>
+            <LoginModal
+                isOpen={loginModal.isOpen}
+                onClose={loginModal.onClose}
+            />
         </Center>
     );
 }
