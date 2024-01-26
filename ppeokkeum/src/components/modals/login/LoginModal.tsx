@@ -1,5 +1,5 @@
 import {
-    Center,
+    Button,
     FormLabel,
     Icon,
     Input,
@@ -16,6 +16,9 @@ import { LuUser2 } from "react-icons/lu";
 import { FiLock } from "react-icons/fi";
 import { FieldValues, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { LoginAccount } from "../../../utils/firestore/account/LoginAccount";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
     isOpen: boolean;
@@ -24,9 +27,12 @@ interface IProps {
 
 export default function LoginModal({ isOpen, onClose }: IProps) {
     const toast = useToast();
+    const navigate = useNavigate();
     const { register, reset, handleSubmit } = useForm();
 
-    function onSubmit({ email, password }: FieldValues) {
+    const [loading, setLoading] = useState(false);
+
+    async function onSubmit({ email, password }: FieldValues) {
         if (!email) {
             toast({
                 status: "error",
@@ -42,9 +48,22 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
             });
             return;
         }
+        setLoading(true);
+        const isSucces = await LoginAccount(email, password);
 
-        //이메일로 로그인하는 부분 만들기
-
+        if (isSucces) {
+            toast({
+                status: "success",
+                title: "로그인 성공",
+            });
+            navigate("/main");
+        } else {
+            toast({
+                status: "error",
+                title: "이메일 또는 비밀번호를 확인해주세요",
+            });
+        }
+        setLoading(false);
         reset();
     }
 
@@ -93,7 +112,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                         />
                     </InputGroup>
 
-                    <Center
+                    <Button
                         mt="20px"
                         w="100%"
                         h="45px"
@@ -106,10 +125,11 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                         transition="all 0.1s linear"
                         as="button"
                         type="submit"
+                        isLoading={loading}
                     >
                         로그인
-                    </Center>
-                    <Center
+                    </Button>
+                    <Button
                         mb="20px"
                         w="100%"
                         h="45px"
@@ -133,7 +153,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                             w="25px"
                             h="25px"
                         />
-                    </Center>
+                    </Button>
                 </VStack>
             </ModalContent>
         </Modal>
