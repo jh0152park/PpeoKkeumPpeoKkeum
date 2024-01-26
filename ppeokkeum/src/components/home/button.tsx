@@ -3,10 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 interface IProps {
     text: string;
+    modalOpen: () => void;
 }
 
-export default function Button({ text }: IProps) {
+export default function Button({ text, modalOpen }: IProps) {
     const navigate = useNavigate();
+
+    function onModalOpen() {
+        modalOpen();
+    }
 
     return (
         <Center
@@ -18,9 +23,7 @@ export default function Button({ text }: IProps) {
             fontWeight="bold"
             _hover={{ cursor: "pointer", transform: ["scale(1.05)"] }}
             transition="all 0.1s linear"
-            onClick={() => {
-                navigate("/main");
-            }}
+            onClick={onModalOpen}
         >
             {text}
         </Center>
