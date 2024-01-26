@@ -18,7 +18,9 @@ import {
 import { ISmokingArea } from "../../../projectCommon";
 import { FcLike, FcDislike } from "react-icons/fc";
 import { FieldValues, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { doc, updateDoc } from "firebase/firestore";
+import { FirebaseDB } from "../../../Firebase";
 
 interface IProps {
     isOpen: boolean;
@@ -36,8 +38,19 @@ export default function LocationInfoModal({
     const [dislike, setDislike] = useState(0);
     const { register, reset, handleSubmit } = useForm();
 
-    function onModalClose() {
+    async function onModalClose() {
         onClose();
+
+        const ref = doc(FirebaseDB, "smokingArea", smokingArea.id);
+        await updateDoc(ref, {
+            like: like ? smokingArea.like + like : smokingArea.like,
+            dislike: dislike
+                ? smokingArea.dislike + dislike
+                : smokingArea.dislike,
+        });
+
+        setLike(0);
+        setDislike(0);
     }
 
     function toggleLike() {
