@@ -10,10 +10,11 @@ import {
     ModalHeader,
     ModalOverlay,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import { LuUser2 } from "react-icons/lu";
 import { FiLock } from "react-icons/fi";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 
 interface IProps {
@@ -22,14 +23,44 @@ interface IProps {
 }
 
 export default function LoginModal({ isOpen, onClose }: IProps) {
+    const toast = useToast();
     const { register, reset, handleSubmit } = useForm();
+
+    function onSubmit({ email, password }: FieldValues) {
+        if (!email) {
+            toast({
+                status: "error",
+                title: "이메일을 입력해주세요",
+            });
+            return;
+        }
+
+        if (!password) {
+            toast({
+                status: "error",
+                title: "비밀번호를 입력해주세요",
+            });
+            return;
+        }
+
+        //이메일로 로그인하는 부분 만들기
+
+        reset();
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
             <ModalOverlay />
             <ModalContent bgColor="#121210">
                 <ModalHeader>뻐끔뻐끔에 로그인하기</ModalHeader>
-                <VStack px="20px" mt="40px" w="100%" alignItems="flex-start">
+                <VStack
+                    px="20px"
+                    mt="40px"
+                    w="100%"
+                    alignItems="flex-start"
+                    as="form"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
                     <FormLabel>이메일</FormLabel>
                     <InputGroup>
                         <InputLeftElement pointerEvents="none">
@@ -73,6 +104,8 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                         fontWeight="bold"
                         _hover={{ cursor: "pointer" }}
                         transition="all 0.1s linear"
+                        as="button"
+                        type="submit"
                     >
                         로그인
                     </Center>
