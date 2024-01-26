@@ -1,4 +1,5 @@
 import {
+    Button,
     Center,
     FormLabel,
     Icon,
@@ -25,6 +26,9 @@ import {
     REGISTER_INPUT_EMAIL,
     REGISTER_INPUT_PASSWORD,
 } from "../../../projectCommon";
+import { useState } from "react";
+import { LoginWithGoogle } from "../../../utils/firestore/account/LoginWithGoogle";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
     isOpen: boolean;
@@ -33,11 +37,14 @@ interface IProps {
 
 export default function SignupModal({ isOpen, onClose }: IProps) {
     const toast = useToast();
+    const navigate = useNavigate();
     const { register, reset, handleSubmit } = useForm();
     const certificateModal = useDisclosure();
 
     const setInputEmail = useSetRecoilState(REGISTER_INPUT_EMAIL);
     const setInputPassword = useSetRecoilState(REGISTER_INPUT_PASSWORD);
+
+    const [googleLoading, setGoogleLoading] = useState(false);
 
     function onSubmit({ email, password, passwordCheck }: FieldValues) {
         if (!email) {
@@ -81,6 +88,24 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
     function onModalClose() {
         reset();
         onClose();
+    }
+
+    async function onGoogleLoginClick() {
+        setGoogleLoading(true);
+        const isSucces = await LoginWithGoogle();
+        if (isSucces) {
+            toast({
+                status: "success",
+                title: "로그인 성공",
+            });
+            navigate("/main");
+        } else {
+            toast({
+                status: "error",
+                title: "이메일 또는 비밀번호를 확인해주세요",
+            });
+        }
+        setGoogleLoading(false);
     }
 
     return (
@@ -166,7 +191,7 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
                         >
                             다음
                         </Center>
-                        <Center
+                        <Button
                             mb="20px"
                             w="100%"
                             h="45px"
@@ -178,6 +203,8 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
                             _hover={{ cursor: "pointer" }}
                             transition="all 0.1s linear"
                             position="relative"
+                            isLoading={googleLoading}
+                            onClick={onGoogleLoginClick}
                         >
                             구글 계정으로 로그인
                             <Icon
@@ -190,7 +217,7 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
                                 w="25px"
                                 h="25px"
                             />
-                        </Center>
+                        </Button>
                     </VStack>
                 </ModalContent>
             </Modal>

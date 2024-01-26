@@ -19,6 +19,8 @@ import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { LoginAccount } from "../../../utils/firestore/account/LoginAccount";
 import { useNavigate } from "react-router-dom";
+import { LoginWithGoogle } from "../../../utils/firestore/account/LoginWithGoogle";
+import { FirebaseAuth } from "../../../Firebase";
 
 interface IProps {
     isOpen: boolean;
@@ -31,6 +33,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
     const { register, reset, handleSubmit } = useForm();
 
     const [loading, setLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
 
     async function onSubmit({ email, password }: FieldValues) {
         if (!email) {
@@ -57,6 +60,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                 title: "로그인 성공",
             });
             navigate("/main");
+            // FirebaseAuth.currentUser?.displayName
         } else {
             toast({
                 status: "error",
@@ -65,6 +69,24 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
         }
         setLoading(false);
         reset();
+    }
+
+    async function onGoogleLoginClick() {
+        setGoogleLoading(true);
+        const isSucces = await LoginWithGoogle();
+        if (isSucces) {
+            toast({
+                status: "success",
+                title: "로그인 성공",
+            });
+            navigate("/main");
+        } else {
+            toast({
+                status: "error",
+                title: "이메일 또는 비밀번호를 확인해주세요",
+            });
+        }
+        setGoogleLoading(false);
     }
 
     return (
@@ -141,6 +163,8 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                         _hover={{ cursor: "pointer" }}
                         transition="all 0.1s linear"
                         position="relative"
+                        onClick={onGoogleLoginClick}
+                        isLoading={googleLoading}
                     >
                         구글 계정으로 로그인
                         <Icon
