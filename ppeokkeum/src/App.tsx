@@ -4,6 +4,10 @@ import Home from "./screens/Home";
 import Loyout from "./screens/global/Layout";
 import Notfound from "./screens/global/Notfound";
 import Main from "./screens/Main";
+import { uploadDB } from "./utils/firestore/createAreaDB";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { CURRENT_MODE } from "./projectCommon";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +29,14 @@ const router = createBrowserRouter([
 
 function App() {
     // uploadDB();
+    const setCurrentMode = useSetRecoilState(CURRENT_MODE);
+
+    useEffect(() => {
+        if (document.documentElement.clientWidth < 500) {
+            setCurrentMode("mobile");
+        }
+    }, []);
+
     return (
         <>
             <Helmet>

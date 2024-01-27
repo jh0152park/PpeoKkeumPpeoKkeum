@@ -21,14 +21,16 @@ import { FieldValues, useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from "react-icons/md";
 import CertificationModal from "./CertificationModal";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
+    CURRENT_MODE,
     REGISTER_INPUT_EMAIL,
     REGISTER_INPUT_PASSWORD,
 } from "../../../projectCommon";
 import { useState } from "react";
 import { LoginWithGoogle } from "../../../utils/firestore/account/LoginWithGoogle";
 import { useNavigate } from "react-router-dom";
+import { browserName } from "react-device-detect";
 
 interface IProps {
     isOpen: boolean;
@@ -45,6 +47,8 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
     const setInputPassword = useSetRecoilState(REGISTER_INPUT_PASSWORD);
 
     const [googleLoading, setGoogleLoading] = useState(false);
+
+    const isMobile = useRecoilValue(CURRENT_MODE) === "mobile";
 
     function onSubmit({ email, password, passwordCheck }: FieldValues) {
         if (!email) {
@@ -91,6 +95,14 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
     }
 
     async function onGoogleLoginClick() {
+        if (browserName.toLowerCase() === "mobile safari" || isMobile) {
+            toast({
+                status: "error",
+                title: "해당 기능은 현재 준비중입니다",
+            });
+            return;
+        }
+
         setGoogleLoading(true);
         const isSucces = await LoginWithGoogle();
         if (isSucces) {
@@ -102,7 +114,7 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
         } else {
             toast({
                 status: "error",
-                title: "이메일 또는 비밀번호를 확인해주세요",
+                title: "잠시 후 다시 이용해주세요",
             });
         }
         setGoogleLoading(false);

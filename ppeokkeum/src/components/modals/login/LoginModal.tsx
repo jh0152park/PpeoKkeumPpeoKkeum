@@ -20,7 +20,9 @@ import { useState } from "react";
 import { LoginAccount } from "../../../utils/firestore/account/LoginAccount";
 import { useNavigate } from "react-router-dom";
 import { LoginWithGoogle } from "../../../utils/firestore/account/LoginWithGoogle";
-import { FirebaseAuth } from "../../../Firebase";
+import { browserName } from "react-device-detect";
+import { useRecoilValue } from "recoil";
+import { CURRENT_MODE } from "../../../projectCommon";
 
 interface IProps {
     isOpen: boolean;
@@ -34,6 +36,8 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
 
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
+
+    const isMobile = useRecoilValue(CURRENT_MODE);
 
     async function onSubmit({ email, password }: FieldValues) {
         if (!email) {
@@ -72,6 +76,14 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
     }
 
     async function onGoogleLoginClick() {
+        if (browserName.toLowerCase() === "mobile safari" || isMobile) {
+            toast({
+                status: "error",
+                title: "해당 기능은 현재 준비중입니다",
+            });
+            return;
+        }
+
         setGoogleLoading(true);
         const isSucces = await LoginWithGoogle();
         if (isSucces) {
@@ -83,7 +95,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
         } else {
             toast({
                 status: "error",
-                title: "이메일 또는 비밀번호를 확인해주세요",
+                title: "잠시 후 다시 이용해주세요",
             });
         }
         setGoogleLoading(false);

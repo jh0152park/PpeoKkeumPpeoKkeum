@@ -51,3 +51,8 @@ export const REGISTER_INPUT_PASSWORD = atom({
     default: "",
     key: "REGISTER_INPUT_PASSWORD",
 });
+
+export const CURRENT_MODE = atom({
+    default: "web",
+    key: "CURRENT_MODE",
+});
