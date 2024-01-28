@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import {
     CURRENT_LATITUDE,
     CURRENT_LONGITUDE,
+    CURRENT_MODE,
     ISmokingArea,
     MAP_LEVEL,
 } from "../projectCommon";
@@ -29,6 +30,15 @@ export default function Main() {
     const [singleArea, setSingleArea] = useState<ISmokingArea>();
 
     const locationInfoModal = useDisclosure();
+
+    const mapContainer = document.getElementById("map") as HTMLElement;
+    const mapOption = {
+        center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
+        level: mapLevel,
+    };
+
+    const isMobile = useRecoilValue(CURRENT_MODE) === "mobile";
+    // const map = new kakao.maps.Map(mapContainer, mapOption);
 
     async function getSmokingAreas() {
         try {
@@ -72,11 +82,18 @@ export default function Main() {
         getSmokingAreas();
     }, []);
 
+    useEffect(() => {
+        if (mapContainer && isMobile) {
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+            map.relayout();
+        }
+    }, [mapContainer]);
+
     return (
         <VStack w="100%" h="100%">
             <SearchBar />
 
-            <Box w="100%" h="100%" position="relative">
+            <Box w="100%" h="100%" position="relative" id="map">
                 <VStack position="absolute" zIndex="99" left="10px" top="50px">
                     <ControlButton icon={FiZoomIn} action="zoomIn" />
                     <ControlButton icon={FiZoomOut} action="zoomOut" />
