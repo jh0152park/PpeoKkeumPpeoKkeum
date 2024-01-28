@@ -54,7 +54,7 @@ export default function Header() {
                 <Box
                     position="absolute"
                     top={isMobile ? -3 : -10}
-                    left={isMobile ? -55 : -100}
+                    left={isMobile ? -65 : -100}
                 >
                     <Lottie
                         style={{
