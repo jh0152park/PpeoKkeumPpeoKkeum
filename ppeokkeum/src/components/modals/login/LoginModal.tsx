@@ -23,6 +23,12 @@ import { LoginWithGoogle } from "../../../utils/firestore/account/LoginWithGoogl
 import { browserName } from "react-device-detect";
 import { useRecoilValue } from "recoil";
 import { CURRENT_MODE } from "../../../projectCommon";
+import {
+    GoogleAuthProvider,
+    getRedirectResult,
+    signInWithRedirect,
+} from "firebase/auth";
+import { FirebaseAuth } from "../../../Firebase";
 
 interface IProps {
     isOpen: boolean;
@@ -76,16 +82,19 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
     }
 
     async function onGoogleLoginClick() {
-        if (browserName.toLowerCase() === "mobile safari" || isMobile) {
-            toast({
-                status: "error",
-                title: "해당 기능은 현재 준비중입니다",
-            });
-            return;
-        }
+        // if (browserName.toLowerCase() === "mobile safari" || isMobile) {
+        //     toast({
+        //         status: "error",
+        //         title: "해당 기능은 현재 준비중입니다",
+        //     });
+        //     return;
+        // }
 
         setGoogleLoading(true);
+        console.log("start to login with Google");
+
         const isSucces = await LoginWithGoogle();
+        console.log(`google login result: ${isSucces}`);
         if (isSucces) {
             toast({
                 status: "success",
@@ -98,7 +107,6 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                 title: "잠시 후 다시 이용해주세요",
             });
         }
-        setGoogleLoading(false);
     }
 
     return (
