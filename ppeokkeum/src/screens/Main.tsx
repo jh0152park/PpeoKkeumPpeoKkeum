@@ -8,6 +8,8 @@ import {
     CURRENT_MODE,
     ISmokingArea,
     MAP_LEVEL,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
 } from "../projectCommon";
 import { useEffect, useRef, useState } from "react";
 import ControlButton from "../components/map/ControlButton";
@@ -31,11 +33,14 @@ export default function Main() {
 
     const locationInfoModal = useDisclosure();
 
-    const mapContainer = document.getElementById("map") as HTMLElement;
-    const mapOption = {
-        center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
-        level: mapLevel,
-    };
+    const screenWidth = useRecoilValue(SCREEN_WIDTH);
+    const screenHeight = useRecoilValue(SCREEN_HEIGHT);
+
+    // const mapContainer = document.getElementById("map") as HTMLElement;
+    // const mapOption = {
+    //     center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
+    //     level: mapLevel,
+    // };
 
     const isMobile = useRecoilValue(CURRENT_MODE) === "mobile";
     // const map = new kakao.maps.Map(mapContainer, mapOption);
@@ -60,6 +65,7 @@ export default function Main() {
                     };
                 });
                 setSmokingArea(entireArea);
+                // console.log(entireArea);
             });
         } catch (error) {
             console.log(error);
@@ -78,23 +84,39 @@ export default function Main() {
         }
     }
 
+    // if (isMobile) {
+    //     if (document.getElementById("map")) {
+    //         const map = new kakao.maps.Map(
+    //             document.getElementById("map") as HTMLElement,
+    //             {
+    //                 center: new kakao.maps.LatLng(
+    //                     currentLatitude,
+    //                     currentLongitude
+    //                 ),
+    //                 level: mapLevel,
+    //             }
+    //         );
+    //         map.relayout();
+    //     }
+    // }
+
     useEffect(() => {
         getSmokingAreas();
     }, []);
 
-    useEffect(() => {
-        if (mapContainer && isMobile) {
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-            map.relayout();
-        }
-    }, [mapContainer]);
+    // useEffect(() => {
+    //     if (mapContainer && isMobile) {
+    //         var map = new kakao.maps.Map(mapContainer, mapOption);
+    //         map.relayout();
+    //     }
+    // }, [mapContainer]);
 
     return (
-        <VStack w="100%" h="100%">
-            <SearchBar />
+        <>
+            {/* <SearchBar /> */}
 
-            <Box w="100%" h="100%" position="relative" id="map">
-                <VStack position="absolute" zIndex="99" left="10px" top="50px">
+            <Box w="100%" h="100vh" position="relative" id="map">
+                <VStack position="absolute" zIndex="99" left="10px" top="200px">
                     <ControlButton icon={FiZoomIn} action="zoomIn" />
                     <ControlButton icon={FiZoomOut} action="zoomOut" />
                     <ControlButton
@@ -105,10 +127,16 @@ export default function Main() {
                 </VStack>
                 <Map
                     center={{ lat: currentLatitude, lng: currentLongitude }}
-                    style={{ width: "100%", height: "100%" }}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
                     zoomable={true}
                     level={mapLevel}
                     ref={mapRef}
+                    onCreate={(map) => {
+                        window.kakaoMap = map;
+                    }}
                 >
                     {!smokingArea ? (
                         <LoadingScreen />
@@ -142,6 +170,6 @@ export default function Main() {
                     smokingArea={singleArea}
                 />
             )}
-        </VStack>
+        </>
     );
 }

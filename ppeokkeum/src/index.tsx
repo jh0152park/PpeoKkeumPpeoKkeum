@@ -8,6 +8,7 @@ import { ChakraProvider, ColorModeScript, theme } from "@chakra-ui/react";
 declare global {
     interface Window {
         IMP: any;
+        kakaoMap: any;
     }
 }
 
