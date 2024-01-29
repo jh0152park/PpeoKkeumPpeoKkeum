@@ -95,13 +95,13 @@ export default function SignupModal({ isOpen, onClose }: IProps) {
     }
 
     async function onGoogleLoginClick() {
-        // if (browserName.toLowerCase() === "mobile safari" || isMobile) {
-        //     toast({
-        //         status: "error",
-        //         title: "해당 기능은 현재 준비중입니다",
-        //     });
-        //     return;
-        // }
+        if (isMobile) {
+            toast({
+                status: "error",
+                title: "해당 기능은 PC에서 가능합니다",
+            });
+            return;
+        }
 
         setGoogleLoading(true);
         const isSucces = await LoginWithGoogle();
