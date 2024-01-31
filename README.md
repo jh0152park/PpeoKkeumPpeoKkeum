@@ -6,13 +6,5 @@
 -   앱: [김유현](https://github.com/Yuhyeon0516)
 -   기술: 리액트, 리액트네이티브, 파이버에이스
 
-### todo list
-
-```
-- Get entire locations(public + private)
-- Apply get current location from user
-- Add map zoom in button
-- Add map zoom out button
-- Add register current location to map
-- Search specific location by user
-```
+# 올바른 흡연문화를 조성하기 위한 흡연가능구역 위치 안내 서비스
+# URL: 
