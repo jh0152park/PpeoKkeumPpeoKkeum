@@ -43,7 +43,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
 
-    const isMobile = useRecoilValue(CURRENT_MODE);
+    const isMobile = useRecoilValue(CURRENT_MODE) === "mobile";
 
     async function onSubmit({ email, password }: FieldValues) {
         if (!email) {
@@ -91,10 +91,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
         }
 
         setGoogleLoading(true);
-        console.log("start to login with Google");
-
         const isSucces = await LoginWithGoogle();
-        console.log(`google login result: ${isSucces}`);
         if (isSucces) {
             toast({
                 status: "success",
@@ -107,6 +104,7 @@ export default function LoginModal({ isOpen, onClose }: IProps) {
                 title: "잠시 후 다시 이용해주세요",
             });
         }
+        setGoogleLoading(false);
     }
 
     return (
